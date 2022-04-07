@@ -6,8 +6,7 @@ require.context('../stylesheets/', true, /\.(css|scss)$/i)
 //TODO - Your ES6 JavaScript code (if any) goes here
 import 'bootstrap'
 
-let suggested_books = []
-function addBook(event) {
+function addCard(event) {
     event.preventDefault()
     let t = document.querySelector("#title").value
     let p = document.querySelector("#poster").value
@@ -15,12 +14,12 @@ function addBook(event) {
     let d = document.querySelector("#description").value
     let y = document.querySelector("#year").value
 
-    let books = getCards()
+    let cards = getCards()
 
     if(t && p && a && d && y) {
-        let book = { title: t, poster: p, author: a, description: d, year: y }
-        books.push(book)
-        localStorage.setItem('books', JSON.stringify(books))
+        let card = { title: t, poster: p, author: a, description: d, year: y}
+        cards.push(card)
+        localStorage.setItem('suggested_books', JSON.stringify(cards))
     }
 
     this.reset()
@@ -28,21 +27,22 @@ function addBook(event) {
 }
 
 function getCards() {
-    if(localStorage.getItem('books') && localStorage.getItem("books") != '[]') {
-        return JSON.parse(localStorage.getItem('books'))
+    if(localStorage.getItem('suggested_books') && localStorage.getItem("suggested_books") != '[]') {
+        return JSON.parse(localStorage.getItem('suggested_books'))
     }
 }
 
-function displayBooks() {
+function displayCards() {
     let cards = getCards()
     let cards_html = ''
     let ndx = 0
     for(let c of cards) {
         cards_html += `
         <div class="card col mb-3" data-ndx="${ndx}">
+        <h3>Book Suggestions</h3>
           <div class="row g-0">
               <div class="col-md-4">
-              <img src="${c.poster}" class="card-img" alt="${c.poster}">
+              <img src="${c.poster}" class="card-img" alt="picture">
               </div>
               <div class="col-md-8">
                   <div class="card-body">
@@ -50,9 +50,6 @@ function displayBooks() {
                   <p class="card-text">${c.author}</p>
                   <p class="card-text">${c.description}</p>
                   <p class="card-text">${c.year}</p>
-                      <p class="card-text">
-                          <button class="btn btn-danger to-delete">Delete</button>
-                      </p>
                   </div>
               </div>
           </div>
@@ -61,17 +58,7 @@ function displayBooks() {
       ndx++
     }
 
-    document.querySelector("#cards").innerHTML = cards_html
-
-    document.querySelectorAll('.to-delete').forEach(function(btn) {
-      btn.onclick = function(event) {
-          if(confirm("Are you sure you want to delete this card?")) {
-              cards.splice(event.target.closest('.col').dataset.ndx, 1)
-              localStorage.setItem("cards", JSON.stringify(cards))
-              displayCards()
-          }
-      }
-    })
-
-    hideForm()
+    document.querySelector(".cards").innerHTML = cards_html
 }
+document.querySelector("#myForm").onsubmit = addCard
+displayCards()
