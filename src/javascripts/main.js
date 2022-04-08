@@ -6,6 +6,16 @@ require.context('../stylesheets/', true, /\.(css|scss)$/i)
 //TODO - Your ES6 JavaScript code (if any) goes here
 import 'bootstrap'
 
+let initial_card = [
+    {
+      title: "Janitors", 
+      poster: "https://images.unsplash.com/photo-1597778602022-f2d97b8c1493?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1287&q=80",
+      author: "Brandon Mull",
+      description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Voluptas atque itaque quod facere vel nostrum, quae illo alias consequatur voluptatem. Laboriosam quod possimus nulla sequi dolorem expedita aut voluptatibus asperiores!", 
+      year: "2003"
+    }
+]
+
 function addCard(event) {
     event.preventDefault()
     let t = document.querySelector("#title").value
@@ -14,7 +24,7 @@ function addCard(event) {
     let d = document.querySelector("#description").value
     let y = document.querySelector("#year").value
 
-    let cards = getCards()
+    let cards = initial_card
 
     if(t && p && a && d && y) {
         let card = { title: t, poster: p, author: a, description: d, year: y}
@@ -29,6 +39,8 @@ function addCard(event) {
 function getCards() {
     if(localStorage.getItem('suggested_books') && localStorage.getItem("suggested_books") != '[]') {
         return JSON.parse(localStorage.getItem('suggested_books'))
+    } else {
+        return initial_card
     }
 }
 
